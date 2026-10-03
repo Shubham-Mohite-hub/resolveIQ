@@ -103,9 +103,47 @@ const updateTicket = async (req, res) => {
     }
 };
 
+const assignTicket = async (req, res) => {
+    try {
+        const { agentId } = req.body;
+
+        const ticket = await Ticket.findByIdAndUpdate(
+            req.params.id,
+            {
+                assignedAgent: agentId
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate(
+            "assignedAgent",
+            "name email role"
+        );
+
+        if (!ticket) {
+            return res.status(404).json({
+                message: "Ticket not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Ticket assigned successfully",
+            ticket
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to assign ticket",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     createTicket,
     getTickets,
     getTicketById,
-    updateTicket
+    updateTicket,
+    assignTicket
 };
