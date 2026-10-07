@@ -1,4 +1,5 @@
 const Ticket = require("../models/Ticket");
+const User = require("../models/User");
 
 const createTicket = async (req, res) => {
     try {
@@ -106,6 +107,22 @@ const updateTicket = async (req, res) => {
 const assignTicket = async (req, res) => {
     try {
         const { agentId } = req.body;
+
+        // Check whether the user exists
+        const agent = await User.findById(agentId);
+
+        if (!agent) {
+            return res.status(404).json({
+                message: "Agent not found"
+            });
+        }
+
+        // Make sure the user is actually an agent
+        if (agent.role !== "agent") {
+            return res.status(400).json({
+                message: "Ticket can only be assigned to an agent"
+            });
+        }
 
         const ticket = await Ticket.findByIdAndUpdate(
             req.params.id,
