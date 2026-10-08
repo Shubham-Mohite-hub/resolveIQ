@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const ticketRoutes = require("./routes/ticketRoutes");
 const messageRoutes = require("./routes/messageRoutes");
-
+const aiRoutes = require("./routes/aiRoutes");
 dotenv.config();
 
 console.log("Mongo URI exists:", !!process.env.MONGO_URI);
@@ -21,6 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/ai", aiRoutes);
 connectDB();
 
 app.get("/", (req, res) => {
