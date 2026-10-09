@@ -29,12 +29,15 @@ const analyzeTicketWithAI = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: "AI analysis failed",
-            error: error.message
-        });
-    }
+    console.error("AI analysis error:", error);
+    console.error("Error stack:", error.stack);
+
+    res.status(500).json({
+        message: "AI analysis failed",
+        error: error.message
+    });
 };
+}
 
 module.exports = {
     analyzeTicketWithAI
