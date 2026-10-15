@@ -14,10 +14,17 @@ function App() {
  
 const [tickets, setTickets] = useState([]);
 const [ticket, setTicket] = useState(null);
-useEffect(() => {
-}, [ticket]);
 const [ticketLoading, setTicketLoading] = useState(true);
 const [ticketError, setTicketError] = useState("");
+const totalTickets = tickets.length;
+
+const urgentTickets = tickets.filter(
+  (item) => item.priority?.toLowerCase() === "urgent"
+).length;
+
+const openTickets = tickets.filter(
+  (item) => item.status?.toLowerCase() === "open"
+).length;
 
 useEffect(() => {
   if (!isLoggedIn) {
@@ -184,23 +191,27 @@ if (!ticket) {
           <div className="welcome-symbol">✳</div>
         </section>
 
-        <section className="stats-grid">
-          <div className="stat-card">
-            <p>Current ticket</p>
-            <h3>#{ticket.id.slice(-6).toUpperCase()}</h3>
-            <span>Customer support case</span>
-          </div>
-          <div className="stat-card">
-            <p>Priority</p>
-            <h3 className="urgent-text">{ticket.priority}</h3>
-            <span>Requires prompt attention</span>
-          </div>
-          <div className="stat-card">
-            <p>Category</p>
-            <h3>{ticket.category}</h3>
-            <span>Payment & subscription</span>
-          </div>
-        </section>
+        
+<section className="stats-grid">
+  <div className="stat-card">
+    <p>Total Tickets</p>
+    <h3>{totalTickets}</h3>
+    <span>Tickets fetched from MongoDB</span>
+  </div>
+
+  <div className="stat-card">
+    <p>Urgent Tickets</p>
+    <h3 className="urgent-text">{urgentTickets}</h3>
+    <span>Require prompt attention</span>
+  </div>
+
+  <div className="stat-card">
+    <p>Open Tickets</p>
+    <h3>{openTickets}</h3>
+    <span>Awaiting resolution</span>
+  </div>
+</section>
+
 
         
 <section className="ticket-list">
